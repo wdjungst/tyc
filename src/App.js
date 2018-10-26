@@ -32,7 +32,7 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({ images: shuffle(Object.values(images)) }, () => {
-      this.id = setInterval(this.updateImage, 1500)
+      this.id = setInterval(this.updateImage, 2000)
     })
   }
 
