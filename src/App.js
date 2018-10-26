@@ -1,25 +1,57 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Image } from 'semantic-ui-react'
+function importAll(r) {
+  let images = {};
+  r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+  return images;
+}
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+const images = importAll(require.context('./images', false, /\.(png|jpe?g|svg)$/));
 
 class App extends Component {
+  state = { images: [], image: 0 }
+
+  componentDidMount() {
+    this.setState({ images: shuffle(Object.values(images)) }, () => {
+      this.id = setInterval(this.updateImage, 1500)
+    })
+  }
+
+  updateImage = () => {
+    const { image } = this.state
+    let index = image
+    if (image === images.length - 1)
+       index = 0
+    else
+      index = index + 1
+
+    this.setState({ image: index })
+  }
+
   render() {
+    const { images, image } = this.state
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        { images.length > 0 && <Image src={images[image]} /> }
       </div>
     );
   }
