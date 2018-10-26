@@ -39,7 +39,7 @@ class App extends Component {
   updateImage = () => {
     const { image } = this.state
     let index = image
-    if (image === images.length - 1)
+    if (image === images.length)
        index = 0
     else
       index = index + 1
